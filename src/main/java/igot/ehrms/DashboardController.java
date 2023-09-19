@@ -1,7 +1,10 @@
 package igot.ehrms;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
+import igot.ehrms.log.LogService;
+import igot.ehrms.model.LogModel;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +23,15 @@ public class DashboardController {
     @Autowired
     DashboardService dashboardService;
 
+    @Autowired
+    LogService logService;
+
     @GetMapping("{parentMapId}")
 	public ResponseEntity<MetricsApiFinalResponse> getMetrics(@PathVariable("parentMapId") String orgId) throws IOException, ParseException {
-		MetricsApiFinalResponse response = dashboardService.getOrgMetrics(orgId);
+        LogModel logModel = new LogModel(orgId, LocalDateTime.now());
+        logService.createLog(logModel);
+
+        MetricsApiFinalResponse response = dashboardService.getOrgMetrics(orgId);
         return new ResponseEntity<>(response, response.getResponseCode());
 	}
 
