@@ -27,8 +27,9 @@ public class Constants {
 	public static final String API_EHRMS_DASHBOARD = "api.ehrms.dashboard";
 	public static final String RESPONSE_FILE_PATH = System.getProperty("user.home")+"/ehrms/ehrmsResponse.json";
 	public static final String TABLE_LOG = "ehrms_log";
-	
-	
+	public static final String KEY_PATH = System.getProperty("user.home")+"/ehrms/repo.json";
+
+
 	private Constants() {
 		throw new IllegalStateException("Utility class");
 	}

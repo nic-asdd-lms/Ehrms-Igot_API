@@ -1,11 +1,17 @@
 package igot.ehrms.auth;
 
+import igot.ehrms.util.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +21,14 @@ public class JwtTokenUtil {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
 
-    private String secret = "zdtlD3JK56m6wTTgsNFhqzjqP";
+    private JSONObject secretObject = (JSONObject) new JSONParser().parse(new FileReader(Constants.KEY_PATH));
+    private String secret ;
+
+    public JwtTokenUtil() throws IOException, ParseException {
+        this.secret = secretObject.get("secret").toString();
+    }
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
