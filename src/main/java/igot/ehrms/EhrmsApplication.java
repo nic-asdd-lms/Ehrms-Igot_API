@@ -10,4 +10,5 @@ public class EhrmsApplication {
 		SpringApplication.run(EhrmsApplication.class, args);
 	}
 
+
 }

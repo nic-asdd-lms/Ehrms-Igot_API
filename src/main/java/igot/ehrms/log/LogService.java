@@ -1,10 +1,7 @@
 package igot.ehrms.log;
 
-import igot.ehrms.log.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import igot.ehrms.model.LogModel;
 
 @Service
 public class LogService {

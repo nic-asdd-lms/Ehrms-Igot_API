@@ -1,23 +1,27 @@
 package igot.ehrms;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import igot.ehrms.log.LogModel;
 import igot.ehrms.log.LogService;
-import igot.ehrms.model.LogModel;
+import igot.ehrms.model.metricsApiResponse.MetricsApiFinalResponse;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import igot.ehrms.model.metricsApiResponse.MetricsApiFinalResponse;
+import igot.ehrms.user.UserService;
 
 @RestController
-@RequestMapping("/apis/igot/analytics/")
+@RequestMapping("/apis/igot")
 public class DashboardController {
 
     @Autowired
@@ -26,15 +30,18 @@ public class DashboardController {
     @Autowired
     LogService logService;
 
-    @GetMapping("{parentMapId}")
-	public ResponseEntity<MetricsApiFinalResponse> getMetrics(@PathVariable("parentMapId") String orgId) throws IOException, ParseException {
-        LogModel logModel = new LogModel(orgId, LocalDateTime.now());
+    @Autowired
+    UserService userService;
+
+    @GetMapping("/analytics/{parentMapId}")
+    public ResponseEntity<MetricsApiFinalResponse> getMetrics(@PathVariable("parentMapId") String orgId,
+            @RequestHeader("id") UUID id) throws IOException, ParseException {
+        LogModel logModel = new LogModel(id, orgId, "getMetrics", LocalDateTime.now());
         logService.createLog(logModel);
 
-        MetricsApiFinalResponse response = dashboardService.getOrgMetrics(orgId);
+        MetricsApiFinalResponse response = dashboardService.getOrgMetrics(id, orgId);
         return new ResponseEntity<>(response, response.getResponseCode());
-	}
 
-    
-    
+    }
+
 }

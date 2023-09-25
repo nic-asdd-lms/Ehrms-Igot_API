@@ -7,7 +7,30 @@ API to fetch analytics data of child organisations
 
 ## Run
 1. Set the value of `RESPONSE_FILE_PATH` in `util/Constants.java` to the value of `RESPONSE_PATH` in https://github.com/nic-asdd-lms/EhrmsDashboard/blob/main/src/main/java/igot/ehrms/util/Constants.java
-2. Create table `ehrms_log` in Postgres
+
+2. Create tables `ehrms_users` and `ehrms_log` in Postgres:
+```
+CREATE TABLE IF NOT EXISTS public.ehrms_users
+(
+    id uuid NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
+    org text COLLATE pg_catalog."default",
+    CONSTRAINT ehrms_users_pkey PRIMARY KEY (id)
+)
+```
+
+```
+CREATE TABLE IF NOT EXISTS public.ehrms_log
+(
+    id integer NOT NULL DEFAULT nextval('ehrms_log_id_seq'::regclass),
+    user_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    org_id character varying(50) COLLATE pg_catalog."default",
+    action text COLLATE pg_catalog."default",
+    "timestamp" time without time zone,
+    CONSTRAINT ehrms_log_pkey PRIMARY KEY (id)
+)
+```
+
 3. Add the following lines in `application.properties`:
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/<DATABASE_NAME>

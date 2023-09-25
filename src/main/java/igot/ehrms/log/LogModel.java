@@ -1,6 +1,7 @@
-package igot.ehrms.model;
+package igot.ehrms.log;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -11,12 +12,19 @@ public class LogModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String userId;
     private String orgId;
+    private String action;
     private LocalDateTime timestamp;
 
-    public LogModel(String orgId, LocalDateTime timestamp){
+    public LogModel() {
+    }
+
+    public LogModel(UUID userId, String orgId, String action, LocalDateTime timestamp){
         this.setOrgId(orgId) ;
         this.setTimestamp(timestamp);
+        this.setUserId(userId.toString());
+        this.setAction(action);
     }
 
     public Long getId() {
@@ -37,5 +45,21 @@ public class LogModel {
     }
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

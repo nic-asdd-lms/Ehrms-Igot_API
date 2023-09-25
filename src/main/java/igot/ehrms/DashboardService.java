@@ -1,6 +1,7 @@
 package igot.ehrms;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.json.simple.parser.ParseException;
 
@@ -10,5 +11,5 @@ public interface DashboardService {
     
     
 
-    MetricsApiFinalResponse getOrgMetrics(String orgId) throws IOException, ParseException;
+    MetricsApiFinalResponse getOrgMetrics(UUID id, String orgId) throws IOException, ParseException;
 }
