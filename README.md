@@ -6,7 +6,7 @@ API to fetch analytics data of child organisations
 2. Maven version 3.8.8
 
 ## Run
-1. Set the value of `RESPONSE_FILE_PATH` in `util/Constants.java` to the value of `RESPONSE_PATH` in https://github.com/nic-asdd-lms/EhrmsDashboard/blob/main/src/main/java/igot/ehrms/util/Constants.java
+1. Set the value of `RESPONSE_FILE_PATH` in `util/Constants.java` to the value of `RESPONSE_PATH` in https://github.com/nic-asdd-lms/Igot-Dashboard-Script/blob/main/src/main/java/igot/ehrms/util/Constants.java
 
 2. Create tables `ehrms_users` and `ehrms_log` in Postgres:
 ```
