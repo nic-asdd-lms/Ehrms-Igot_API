@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.HttpServletResponse;
+import igot.ehrms.util.Constants;
 
 @Configuration
 public class SecurityConfiguration {
@@ -51,11 +51,12 @@ public class SecurityConfiguration {
                 .exceptionHandling(
                         exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/authenticate").permitAll()
+                        .requestMatchers(Constants.AUTH_PATH).permitAll()
+                        .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
-                        .loginPage("/authenticate")
+                        .loginPage(Constants.AUTH_PATH)
                         .permitAll())
                 .logout(logout -> logout
                         .permitAll());
@@ -65,6 +66,6 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/authenticate");
+        return (web) -> web.ignoring().requestMatchers(Constants.AUTH_PATH);
     }
 }

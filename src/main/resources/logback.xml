@@ -18,13 +18,13 @@
     </encoder>
   </appender>
 
-    <logger name="igot.ehrms" level="DEBUG" additivity="false">
+    <logger name="igot.ehrms" level="INFO" additivity="false">
     <appender-ref ref="rollingFile" />
     <appender-ref ref="STDOUT" />
 </logger>
 
 <!-- By default, the level of the root level is set to DEBUG -->
-<root level="DEBUG">
+<root level="INFO">
     <appender-ref ref="rollingFile" />
     <appender-ref ref="STDOUT" />
 </root>

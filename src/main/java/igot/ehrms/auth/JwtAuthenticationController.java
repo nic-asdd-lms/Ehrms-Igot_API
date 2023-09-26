@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/apis/igot/dashboard")
 public class JwtAuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -68,8 +70,8 @@ public class JwtAuthenticationController {
         UserModel user = new UserModel(orgId, encPassword);
         user = userService.createUser(user);
 
-        LogModel logModel = new LogModel(user.getId(),orgId, "createUser", LocalDateTime.now());
-        logService.createLog(logModel);
+        // LogModel logModel = new LogModel(user.getId(),orgId, "createUser", LocalDateTime.now());
+        // logService.createLog(logModel);
 
         Map<String, Object> response = new HashMap<>();
         if(user.getId() != null){

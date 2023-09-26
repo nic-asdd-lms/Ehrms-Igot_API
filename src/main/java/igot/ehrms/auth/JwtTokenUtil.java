@@ -16,14 +16,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 @Component
 public class JwtTokenUtil {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 5 * 365 * 24 * 60 * 60;
 
-    private JSONObject secretObject = (JSONObject) new JSONParser().parse(new FileReader(Constants.KEY_PATH));
+    private JSONObject secretObject = (JSONObject) new JSONParser().parse(new FileReader(Constants.METADATA));
     private String secret ;
 
     public JwtTokenUtil() throws IOException, ParseException {

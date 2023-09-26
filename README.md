@@ -1,4 +1,4 @@
-# Ehrms-Igot_API
+# Igot Dashboard API
 API to fetch analytics data of child organisations
 
 ## Prerequisites
@@ -42,7 +42,22 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 
 5. `java -jar target/ehrms-0.0.1-SNAPSHOT.jar`
 
-6. Call the API 
+6. Create user for a department: 
+```
+curl --location --request POST 'localhost:8000/apis/igot/dashboard/user/create/<mapId>' 
+```
+
+7. Generate token for the created user:
+```
+curl --location --request POST 'localhost:8000/apis/igot/dashboard/authenticate' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+   "password": <password>,
+    "username": <id>
+}' 
+```
+
+8. Call the API to get the metrics
 ```
 curl --location --request GET 'localhost:8000/apis/igot/analytics/<mapId>' \
 --header 'id: <id>' \
