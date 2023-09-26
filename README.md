@@ -39,7 +39,9 @@ spring.datasource.password=<POSTGRES_PASSWORD>
 spring.datasource.driver-class-name=org.postgresql.Driver
 ``` 
 4. `mvn clean install`
+
 5. `java -jar target/ehrms-0.0.1-SNAPSHOT.jar`
+
 6. Call the API 
 ```
 curl --location --request GET 'localhost:8000/apis/igot/analytics/<mapId>' \
