@@ -1,5 +1,6 @@
 package igot.ehrms;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,10 +9,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import ch.qos.logback.classic.Logger;
+
 import org.json.simple.*;
 import org.json.simple.parser.*;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import igot.ehrms.model.ApiResponseParams;
@@ -24,20 +30,25 @@ import igot.ehrms.util.Constants;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
+private static final Logger logger = (Logger) LoggerFactory.getLogger(DashboardServiceImpl.class);
 
     @Autowired
     UserService userService;
 
+    @Value("${response}")
+    private String responseFile;
+
     @Override
     public MetricsApiFinalResponse getOrgMetrics(UUID id, String parentOrgId) throws IOException, ParseException {
+        MetricsApiFinalResponse response = CommonUtil.createDefaultResponse(Constants.API_EHRMS_DASHBOARD);
         try {
 
-            MetricsApiFinalResponse response = CommonUtil.createDefaultResponse(Constants.API_EHRMS_DASHBOARD);
             if (validOrgUser(id, parentOrgId)) {
 
                 JSONParser parser = new JSONParser();
 
-                Object obj = parser.parse(new FileReader(Constants.RESPONSE_FILE_PATH));
+                // Object obj = parser.parse(new FileReader(Constants.RESPONSE_FILE_PATH));
+                Object obj = parser.parse(new FileReader(responseFile));
                 JSONObject jsonObject = (JSONObject) obj;
 
                 String errMsg = validateRequest(jsonObject, parentOrgId);
@@ -60,8 +71,16 @@ public class DashboardServiceImpl implements DashboardService {
 
             }
             return response;
+        } catch (FileNotFoundException e) {
+            logger.error("ERROR: File '"+responseFile+"' not found ",  e);
+            response.getParams().setErrmsg("Metrics not generated");
+            response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            return response;
         } catch (Exception e) {
-            return null;
+            logger.error("ERROR: ",  e);
+            response.getParams().setErrmsg(e.toString());
+            response.setResponseCode(HttpStatus.BAD_REQUEST);
+            return response;
         }
 
     }
@@ -70,7 +89,7 @@ public class DashboardServiceImpl implements DashboardService {
         Optional<UserModel> user = userService.getUserById(id);
 
         return (!user.isEmpty() && user.get().getOrg().equalsIgnoreCase(orgId));
-        
+
     }
 
     private String validateRequest(JSONObject jsonObject, String parentOrgId) {

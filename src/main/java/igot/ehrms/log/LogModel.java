@@ -6,7 +6,7 @@ import java.util.UUID;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ehrms_log")
+@Table(name = "ehrms_logs")
 public class LogModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

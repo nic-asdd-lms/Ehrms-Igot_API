@@ -25,9 +25,7 @@ public class Constants {
 	public static final String TENANT_ID = "tenantId";
 	public static final String AGGREGATION_REQUEST_DTO = "aggregationRequestDto";
 	public static final String API_EHRMS_DASHBOARD = "api.ehrms.dashboard";
-	public static final String RESPONSE_FILE_PATH = System.getProperty("user.home")+"/ehrms/ehrmsResponse.json";
 	public static final String TABLE_LOG = "ehrms_log";
-	public static final String METADATA = System.getProperty("user.home")+"/ehrms/metadata_prod.json";
 	public static final String AUTH_PATH = "/apis/igot/dashboard/authenticate";
 	public static final String CREATE_USER_PATH = "/apis/igot/dashboard/user/create/*";
 	
