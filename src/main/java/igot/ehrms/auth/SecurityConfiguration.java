@@ -1,6 +1,11 @@
 package igot.ehrms.auth;
 
+import java.io.FileReader;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +31,9 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Value("${config}")
+    private String configFilePath;
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity)
             throws Exception {
@@ -40,6 +48,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        JSONObject configObj=(JSONObject) new JSONParser().parse(new FileReader(configFilePath));
+        String url = Constants.PORTAL_URL+configObj.get("url").toString();
 
         AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
                 .getSharedObject(AuthenticationManagerBuilder.class);
@@ -53,10 +63,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(Constants.AUTH_PATH).permitAll()
                         .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
+                        .requestMatchers(Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
+                        .requestMatchers(Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
+                        .requestMatchers(url+Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
+                        .requestMatchers(url+Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
-                        .loginPage(Constants.AUTH_PATH)
+                        .loginPage(Constants.SERVICE_PATH+Constants.AUTH_PATH)
                         .permitAll())
                 .logout(logout -> logout
                         .permitAll());

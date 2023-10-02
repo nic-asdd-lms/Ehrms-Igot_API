@@ -28,6 +28,8 @@ public class Constants {
 	public static final String TABLE_LOG = "ehrms_log";
 	public static final String AUTH_PATH = "/apis/igot/dashboard/authenticate";
 	public static final String CREATE_USER_PATH = "/apis/igot/dashboard/user/create/*";
+	public static final String SERVICE_PATH = "/ehrmsservice";
+	public static final String PORTAL_URL = "portal.";
 	
 	private Constants() {
 		throw new IllegalStateException("Utility class");
