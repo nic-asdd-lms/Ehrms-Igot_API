@@ -1,4 +1,4 @@
-# Igot Dashboard API
+# iGOT Dashboard API
 API to fetch analytics data of child organisations
 
 ## Prerequisites
