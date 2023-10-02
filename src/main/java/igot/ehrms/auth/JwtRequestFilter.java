@@ -1,6 +1,5 @@
 package igot.ehrms.auth;
 
-
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,8 +13,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import igot.ehrms.util.CommonUtil;
 
 import java.io.IOException;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -29,6 +30,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        if (!CommonUtil.isDefinedEndpoint(request.getRequestURI())) {
+            logger.error("Endpoint undefined : " + request.getRequestURI(), null);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("404 Not Found");
+            response.getWriter().flush();
+            return;
+        }
         final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
@@ -45,7 +53,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 logger.error("JWT Token has expired");
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            if (CommonUtil.isDefinedEndpoint(request.getRequestURI()))
+                logger.warn("JWT Token not provided");
+            else {
+                logger.error("Endpoint undefined : " + request.getRequestURI(), null);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("404 Not Found");
+                response.getWriter().flush();
+                return;
+            }
         }
 
         // Once we get the token validate it.

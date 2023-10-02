@@ -48,7 +48,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        JSONObject configObj=(JSONObject) new JSONParser().parse(new FileReader(configFilePath));
+JSONObject configObj=(JSONObject) new JSONParser().parse(new FileReader(configFilePath));
         String url = Constants.PORTAL_URL+configObj.get("url").toString();
 
         AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
@@ -61,13 +61,11 @@ public class SecurityConfiguration {
                 .exceptionHandling(
                         exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(Constants.AUTH_PATH).permitAll()
-                        .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
-                        .requestMatchers(Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
-                        .requestMatchers(Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
-                        .requestMatchers(url+Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
-                        .requestMatchers(url+Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
-                        .anyRequest().authenticated())
+                .requestMatchers(Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
+                .requestMatchers(Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
+                .requestMatchers(url+Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
+                .requestMatchers(url+Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
+                .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
                         .loginPage(Constants.SERVICE_PATH+Constants.AUTH_PATH)

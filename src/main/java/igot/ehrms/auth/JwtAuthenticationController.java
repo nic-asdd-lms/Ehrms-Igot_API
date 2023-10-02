@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/apis/igot/dashboard")
+@RequestMapping("/ehrmsservice/apis/igot/dashboard")
 public class JwtAuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;

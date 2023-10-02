@@ -40,4 +40,12 @@ public class CommonUtil {
 
 		return sb.toString();
 	}
+
+	public static boolean isDefinedEndpoint(String endpoint){
+		for (String api : Constants.DEFINED_ENDPOINTS) {
+			if(endpoint.startsWith(api))
+				return true;
+		}
+		return false;
+	}
 }

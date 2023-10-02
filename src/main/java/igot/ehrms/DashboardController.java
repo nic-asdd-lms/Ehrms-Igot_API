@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import igot.ehrms.user.UserService;
 
 @RestController
-@RequestMapping("/apis/igot/dashboard")
+@RequestMapping("/ehrmsservice/apis/igot/dashboard")
 public class DashboardController {
 
     @Autowired

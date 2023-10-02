@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS public.ehrms_logs
 
 4. Create user for a department: 
 ```
-curl --location --request POST 'localhost:8000/apis/igot/dashboard/user/create/<mapId>' 
+curl --location --request POST 'localhost:8000/ehrmsservice/apis/igot/dashboard/user/create/<mapId>' 
 ```
 
 5. Generate token for the created user:
 ```
-curl --location --request POST 'localhost:8000/apis/igot/dashboard/authenticate' \
+curl --location --request POST 'localhost:8000/ehrmsservice/apis/igot/dashboard/authenticate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
    "password": <password>,
@@ -51,7 +51,7 @@ curl --location --request POST 'localhost:8000/apis/igot/dashboard/authenticate'
 
 6. Call the API to get the metrics
 ```
-curl --location --request GET 'localhost:8000/apis/igot/analytics/<mapId>' \
+curl --location --request GET 'localhost:8000/ehrmsservice/apis/igot/analytics/<mapId>' \
 --header 'id: <id>' \
 --header 'Authorization: <Bearer token>' \
 ```
