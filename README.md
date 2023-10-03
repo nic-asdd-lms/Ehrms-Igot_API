@@ -44,8 +44,8 @@ curl --location --request POST 'localhost:8000/ehrmsservice/apis/igot/dashboard/
 curl --location --request POST 'localhost:8000/ehrmsservice/apis/igot/dashboard/authenticate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-   "password": <password>,
-    "username": <id>
+    "password": <password>,
+    "id": <id>
 }' 
 ```
 
