@@ -1,5 +1,6 @@
 package igot.ehrms.auth;
 
+import igot.ehrms.log.LogModel;
 import igot.ehrms.log.LogService;
 import igot.ehrms.user.UserModel;
 import igot.ehrms.user.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,9 +41,9 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequestDto authenticationRequest) throws Exception {
 
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        authenticate(authenticationRequest.getId(), authenticationRequest.getPassword());
 
-        final String token = jwtTokenUtil.generateToken(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(authenticationRequest.getId());
 
 
         return ResponseEntity.ok(new AuthenticateResponseDto(token));

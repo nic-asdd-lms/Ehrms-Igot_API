@@ -30,8 +30,7 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Value("${config}")
+@Value("${config}")
     private String configFilePath;
 
     @Bean
@@ -61,14 +60,12 @@ JSONObject configObj=(JSONObject) new JSONParser().parse(new FileReader(configFi
                 .exceptionHandling(
                         exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests -> requests
-                .requestMatchers(Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
-                .requestMatchers(Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
-                .requestMatchers(url+Constants.SERVICE_PATH+Constants.AUTH_PATH).permitAll()
-                .requestMatchers(url+Constants.SERVICE_PATH+Constants.CREATE_USER_PATH).permitAll()
+                .requestMatchers(Constants.AUTH_PATH).permitAll()
+                .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
-                        .loginPage(Constants.SERVICE_PATH+Constants.AUTH_PATH)
+                        .loginPage(Constants.AUTH_PATH)
                         .permitAll())
                 .logout(logout -> logout
                         .permitAll());

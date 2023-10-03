@@ -26,12 +26,12 @@ public class Constants {
 	public static final String AGGREGATION_REQUEST_DTO = "aggregationRequestDto";
 	public static final String API_EHRMS_DASHBOARD = "api.ehrms.dashboard";
 	public static final String TABLE_LOG = "ehrms_log";
-	public static final String AUTH_PATH = "/apis/igot/dashboard/authenticate";
-	public static final String CREATE_USER_PATH = "/apis/igot/dashboard/user/create/*";
+	public static final String AUTH_PATH = "/ehrmsservice/apis/igot/dashboard/authenticate";
+	public static final String CREATE_USER_PATH = "/ehrmsservice/apis/igot/dashboard/user/create/*";
 	public static final String SERVICE_PATH = "/ehrmsservice";
-	public static final String METRICS_PATH = "/apis/igot/dashboard/analytics/*";
+	public static final String METRICS_PATH = "/ehrmsservice/apis/igot/dashboard/analytics/*";
 	public static final String PORTAL_URL = "portal.";
-	public static final String[] DEFINED_ENDPOINTS={SERVICE_PATH+CREATE_USER_PATH.substring(0, CREATE_USER_PATH.length()-2), SERVICE_PATH+AUTH_PATH, SERVICE_PATH+METRICS_PATH.substring(0, METRICS_PATH.length()-2)};
+	public static final String[] DEFINED_ENDPOINTS={CREATE_USER_PATH.substring(0, CREATE_USER_PATH.length()-2), AUTH_PATH, METRICS_PATH.substring(0, METRICS_PATH.length()-2)};
 	
 	private Constants() {
 		throw new IllegalStateException("Utility class");
