@@ -1,11 +1,6 @@
 package igot.ehrms.auth;
 
-import java.io.FileReader;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,59 +17,58 @@ import igot.ehrms.util.Constants;
 @Configuration
 public class SecurityConfiguration {
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+        @Autowired
+        private JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+        @Autowired
+        private JwtUserDetailsService jwtUserDetailsService;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-@Value("${config}")
-    private String configFilePath;
+        @Autowired
+        private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+        
+        
+        @Bean
+        public AuthenticationManager authenticationManager(HttpSecurity httpSecurity)
+                        throws Exception {
+                AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
+                                .getSharedObject(AuthenticationManagerBuilder.class);
+                authenticationManagerBuilder.userDetailsService(jwtUserDetailsService)
+                                .passwordEncoder(new BCryptPasswordEncoder());
+                return authenticationManagerBuilder.build();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity)
-            throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(jwtUserDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-        return authenticationManagerBuilder.build();
-    }
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                
+                AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
+                                .getSharedObject(AuthenticationManagerBuilder.class);
+                authenticationManagerBuilder.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder);
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-JSONObject configObj=(JSONObject) new JSONParser().parse(new FileReader(configFilePath));
-        String url = Constants.PORTAL_URL+configObj.get("url").toString();
+                httpSecurity.csrf(csrf -> csrf.disable())
+                                .sessionManagement(
+                                                sessionManager -> sessionManager
+                                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .exceptionHandling(
+                                                exceptionHandling -> exceptionHandling
+                                                                .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                                .authorizeHttpRequests(requests -> requests
+                                                .requestMatchers(Constants.AUTH_PATH).permitAll()
+                                                .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
+                                                .anyRequest().authenticated())
+                                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                                .formLogin(form -> form
+                                                .loginPage(Constants.AUTH_PATH)
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .permitAll());
 
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder);
+                return httpSecurity.build();
+        }
 
-        httpSecurity.csrf(csrf -> csrf.disable())
-                .sessionManagement(
-                        sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(
-                        exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .authorizeHttpRequests(requests -> requests
-                .requestMatchers(Constants.AUTH_PATH).permitAll()
-                .requestMatchers(Constants.CREATE_USER_PATH).permitAll()
-                .anyRequest().authenticated())
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(form -> form
-                        .loginPage(Constants.AUTH_PATH)
-                        .permitAll())
-                .logout(logout -> logout
-                        .permitAll());
-
-        return httpSecurity.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(Constants.AUTH_PATH);
-    }
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring().requestMatchers(Constants.AUTH_PATH);
+        }
 }

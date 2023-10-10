@@ -30,8 +30,9 @@ public class Constants {
 	public static final String CREATE_USER_PATH = "/ehrmsservice/apis/igot/dashboard/user/create/*";
 	public static final String SERVICE_PATH = "/ehrmsservice";
 	public static final String METRICS_PATH = "/ehrmsservice/apis/igot/dashboard/analytics/*";
+	public static final String ENROLMENTS_PATH = "/ehrmsservice/apis/igot/enrolments";
 	public static final String PORTAL_URL = "portal.";
-	public static final String[] DEFINED_ENDPOINTS={CREATE_USER_PATH.substring(0, CREATE_USER_PATH.length()-2), AUTH_PATH, METRICS_PATH.substring(0, METRICS_PATH.length()-2)};
+	public static final String[] DEFINED_ENDPOINTS={ENROLMENTS_PATH,CREATE_USER_PATH.substring(0, CREATE_USER_PATH.length()-2), AUTH_PATH, METRICS_PATH.substring(0, METRICS_PATH.length()-2)};
 	
 	private Constants() {
 		throw new IllegalStateException("Utility class");

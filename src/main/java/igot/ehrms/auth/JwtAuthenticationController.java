@@ -1,6 +1,5 @@
 package igot.ehrms.auth;
 
-import igot.ehrms.log.LogModel;
 import igot.ehrms.log.LogService;
 import igot.ehrms.user.UserModel;
 import igot.ehrms.user.UserService;
@@ -67,7 +66,7 @@ public class JwtAuthenticationController {
         String encPassword = CommonUtil.encrypt(password);
 
 
-        UserModel user = new UserModel(orgId, encPassword);
+        UserModel user = new UserModel(orgId, encPassword, LocalDateTime.now());
         user = userService.createUser(user);
 
         // LogModel logModel = new LogModel(user.getId(),orgId, "createUser", LocalDateTime.now());

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import igot.ehrms.user.UserService;
 
 @RestController
-@RequestMapping("/ehrmsservice/apis/igot/dashboard")
+@RequestMapping("/ehrmsservice/apis/igot")
 public class DashboardController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class DashboardController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/analytics/{parentMapId}")
+    @GetMapping("/dashboard/analytics/{parentMapId}")
     public ResponseEntity<MetricsApiFinalResponse> getMetrics(@PathVariable("parentMapId") String orgId,
             @RequestHeader("id") UUID id) throws IOException, ParseException {
         LogModel logModel = new LogModel(id, orgId, "getMetrics", LocalDateTime.now());
@@ -43,5 +43,7 @@ public class DashboardController {
         return new ResponseEntity<>(response, response.getResponseCode());
 
     }
+
+    
 
 }

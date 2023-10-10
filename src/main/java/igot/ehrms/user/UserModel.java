@@ -3,6 +3,7 @@ package igot.ehrms.user;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -14,14 +15,18 @@ public class UserModel {
 
     private String password;
     private String org;
+    private LocalDateTime created_on;
 
 
+    
     public UserModel() {
     }
 
-    public UserModel(String org, String password){
+    public UserModel(String org, String password, LocalDateTime createdOn){
         this.setOrg(org);
         this.setPassword(password);
+        this.setCreated_on(createdOn);
+
     }
 
     public UUID getId() {
@@ -47,5 +52,12 @@ public class UserModel {
         this.org = org;
     }
 
-    
+    public LocalDateTime getCreated_on() {
+        return created_on;
+    }
+
+    public void setCreated_on(LocalDateTime created_on) {
+        this.created_on = created_on;
+    }
+
 }
