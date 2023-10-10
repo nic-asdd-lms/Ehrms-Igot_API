@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.ehrms_users
     id uuid NOT NULL,
     password text COLLATE pg_catalog."default" NOT NULL,
     org text COLLATE pg_catalog."default",
+    created_on timestamp without time zone,
     CONSTRAINT ehrms_users_pkey PRIMARY KEY (id)
 )
 ```
@@ -25,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.ehrms_logs
     user_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
     org_id character varying(50) COLLATE pg_catalog."default",
     action text COLLATE pg_catalog."default",
-    "timestamp" time without time zone,
+    "timestamp" timestamp without time zone,
     CONSTRAINT ehrms_logs_pkey PRIMARY KEY (id)
 )
 ```
