@@ -1,4 +1,4 @@
-package igot.ehrms.model.metricsApiResponse;
+package igot.ehrms.model.metricsapiresponse;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package igot.ehrms;
+package igot.ehrms.dashboard;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,40 +14,43 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import ch.qos.logback.classic.Logger;
+import igot.ehrms.auth.JwtTokenUtil;
+import igot.ehrms.model.ApiResponseParams;
+import igot.ehrms.model.metricsapiresponse.MetricsApiFinalResponse;
+import igot.ehrms.model.metricsapiresponse.Response;
+import igot.ehrms.user.UserModel;
+import igot.ehrms.user.UserService;
+import igot.ehrms.util.CommonUtil;
+import igot.ehrms.util.Constants;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 
-import igot.ehrms.model.ApiResponseParams;
-import igot.ehrms.model.metricsApiResponse.MetricsApiFinalResponse;
-import igot.ehrms.model.metricsApiResponse.Response;
-import igot.ehrms.user.UserModel;
-import igot.ehrms.user.UserService;
-import igot.ehrms.util.CommonUtil;
-import igot.ehrms.util.Constants;
-
 @Service
+@SuppressWarnings("unchecked")
 public class DashboardServiceImpl implements DashboardService {
 private static final Logger logger = (Logger) LoggerFactory.getLogger(DashboardServiceImpl.class);
 
-    @Autowired
+@Autowired
     UserService userService;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
     @Value("${response}")
     private String responseFile;
 
     @Override
-    public MetricsApiFinalResponse getOrgMetrics(UUID id, String parentOrgId) throws IOException, ParseException {
+    public MetricsApiFinalResponse getOrgMetrics(UUID id, String parentOrgId, String token) throws IOException, ParseException {
         MetricsApiFinalResponse response = CommonUtil.createDefaultResponse(Constants.API_EHRMS_DASHBOARD);
         try {
 
-            if (validOrgUser(id, parentOrgId)) {
+            if (validOrgUser(id, parentOrgId,token)) {
 
                 JSONParser parser = new JSONParser();
 
-                // Object obj = parser.parse(new FileReader(Constants.RESPONSE_FILE_PATH));
                 Object obj = parser.parse(new FileReader(responseFile));
                 JSONObject jsonObject = (JSONObject) obj;
 
@@ -85,13 +88,7 @@ private static final Logger logger = (Logger) LoggerFactory.getLogger(DashboardS
 
     }
 
-    private boolean validOrgUser(UUID id, String orgId) {
-        Optional<UserModel> user = userService.getUserById(id);
-
-        return (!user.isEmpty() && user.get().getOrg().equalsIgnoreCase(orgId));
-
-    }
-
+    
     private String validateRequest(JSONObject jsonObject, String parentOrgId) {
         StringBuilder strBuilder = new StringBuilder();
 
@@ -102,5 +99,16 @@ private static final Logger logger = (Logger) LoggerFactory.getLogger(DashboardS
         return strBuilder.toString();
     }
 
+    public boolean validOrgUser(UUID id, String orgId, String token) {
+        Optional<UserModel> user = userService.getUserById(id);
+
+        if(token != null && token.startsWith("Bearer ")){
+            String jwtToken = token.substring(7);
+            return (!user.isEmpty() && user.get().getOrg().equalsIgnoreCase(orgId) && jwtTokenUtil.validateUser(jwtToken, id));
+
+        }
+        return false;
+        
+    }
    
 }

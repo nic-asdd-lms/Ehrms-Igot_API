@@ -1,31 +1,27 @@
-package igot.ehrms.model.metricsApiResponse;
+package igot.ehrms.model;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
-import igot.ehrms.model.ApiResponseParams;
-
-public class MetricsApiFinalResponse {
+public class ApiResponse {
     private String id;
 	private String ver;
 	private String ts;
 	private ApiResponseParams params;
 	private HttpStatus responseCode;
-	private List<Response> result;
 	
     private transient Map<String, Object> response = new HashMap<>();
 
-	public MetricsApiFinalResponse() {
+	public ApiResponse() {
 		this.ver = "v1";
 		this.ts = new Timestamp(System.currentTimeMillis()).toString();
 		this.params = new ApiResponseParams();
 	}
 	
-	public MetricsApiFinalResponse(String id) {
+	public ApiResponse(String id) {
 		this();
 		this.id = id;
 	}
@@ -59,13 +55,7 @@ public class MetricsApiFinalResponse {
 	public void setResponseCode(HttpStatus responseCode) {
 		this.responseCode = responseCode;
 	}
-	public List<Response> getResult() {
-		return result;
-	}
-	public void setResult(List<Response> result) {
-		this.result = result;
-	}
-
+	
     public Object get(String key) {
 		return response.get(key);
 	}

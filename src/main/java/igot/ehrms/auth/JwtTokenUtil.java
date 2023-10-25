@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -83,5 +84,13 @@ public class JwtTokenUtil {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
+    public Boolean validateUser(String token, UUID id) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(id.toString()));
+    }
+
+    
 
 }

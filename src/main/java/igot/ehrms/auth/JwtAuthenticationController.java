@@ -1,9 +1,5 @@
 package igot.ehrms.auth;
 
-import igot.ehrms.log.LogService;
-import igot.ehrms.user.UserModel;
-import igot.ehrms.user.UserService;
-import igot.ehrms.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import igot.ehrms.log.LogService;
+import igot.ehrms.user.UserModel;
+import igot.ehrms.user.UserService;
+import igot.ehrms.util.CommonUtil;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

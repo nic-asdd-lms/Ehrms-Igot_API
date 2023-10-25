@@ -1,4 +1,4 @@
-package igot.ehrms.model.metricsApiResponse;
+package igot.ehrms.model.metricsapiresponse;
 
 public class MetricsResponse {
     private StatusInfo statusInfo;
