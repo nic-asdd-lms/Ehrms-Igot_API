@@ -9,7 +9,7 @@ API to fetch analytics data of child organisations
 
 1. Create tables `ehrms_users` and `ehrms_logs` in Postgres:
 ```
-CREATE TABLE IF NOT EXISTS public.ehrms_users
+CREATE TABLE IF NOT EXISTS ehrms_users
 (
     id uuid NOT NULL,
     password text COLLATE pg_catalog."default" NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.ehrms_users
 ```
 
 ```
-CREATE TABLE IF NOT EXISTS public.ehrms_logs
+CREATE TABLE IF NOT EXISTS ehrms_logs
 (
     id serial NOT NULL ,
     user_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
