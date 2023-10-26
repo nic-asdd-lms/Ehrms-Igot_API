@@ -99,22 +99,30 @@ public class EhrmsServiceImpl implements EhrmsService {
                                     .get(Constants.CONTENT);
                             Map<String, Object> profileDetails = (Map<String, Object>) content.get(0)
                                     .get(Constants.PROFILE_DETAILS);
-                            
+
                             Map<String, Object> updateRequest = createRequest(requestData, profileDetails);
-                            updateRequest.put(Constants.USER_ID, content.get(0).get(Constants.USER_ID));
+                            if (!updateRequest.containsKey(Constants.ERROR)) {
+                                updateRequest.put(Constants.USER_ID, content.get(0).get(Constants.USER_ID));
 
-                            ApiRequest requestBody = new ApiRequest();
-                            requestBody.setRequest(updateRequest);
+                                ApiRequest requestBody = new ApiRequest();
+                                requestBody.setRequest(updateRequest);
 
-                            Map<String, Object> result = update(requestBody);
-                            response.putAll(result);
+                                Map<String, Object> result = update(requestBody);
+                                response.putAll(result);
 
-                            logger.info("iGOT profile updated");
+                                logger.info("iGOT profile updated");
+                            } else {
+                                logger.error(updateRequest.get(Constants.ERROR).toString());
+                                response.getParams().setStatus(Constants.FAILED);
+                                response.getParams().setErr(updateRequest.get(Constants.ERROR).toString());
+                                response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR);
+                            }
+
                         } else {
                             logger.error(Constants.MSG_INVALID_EHRMS_USER);
                             response.getParams().setStatus(Constants.FAILED);
                             response.getParams().setErr(Constants.MSG_INVALID_EHRMS_USER);
-                            response.setResponseCode(HttpStatus.OK);
+                            response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR);
 
                         }
                     }
@@ -148,17 +156,21 @@ public class EhrmsServiceImpl implements EhrmsService {
         Map<String, Object> mappedRequest = new HashMap<>();
         for (Entry<String, Object> entry : request.entrySet()) {
             if (!entry.getKey().equalsIgnoreCase(Constants.EMAIL))
-                mappedRequest.put(jsonObject.get(entry.getKey()).toString(), entry.getValue());
+                if (jsonObject.get(entry.getKey()) != null)
+                    mappedRequest.put(jsonObject.get(entry.getKey()).toString(), entry.getValue());
+                else {
+                    mappedRequest.put(Constants.ERROR, Constants.MSG_INVALID_FIELD + entry.getKey());
+                    return mappedRequest;
+                }
+
         }
 
-        
         Map<String, Object> formattedFields = format(mappedRequest);
         Map<String, Object> requestFields = convertToJson(formattedFields);
         Map<String, Object> fields = new HashMap<>();
         fields.put(Constants.PROFILE_DETAILS, profileDetails);
-        if(request.containsKey(Constants.FIRSTNAME)) 
+        if (request.containsKey(Constants.FIRSTNAME))
             fields.put(Constants.FIRSTNAME, request.get(Constants.FIRSTNAME));
-        
 
         Map<String, Object> mergedFields = merge(requestFields, fields);
 
@@ -179,10 +191,9 @@ public class EhrmsServiceImpl implements EhrmsService {
                 formattedFields.put(Constants.PROFILE_DETAILS_FIRSTNAME, entry.getValue());
 
             } else if (entry.getKey().equals(Constants.QUALIFICATIONS)) {
-                formattedFields.put(entry.getKey(),(ArrayList<Map<String, Object>>) entry.getValue());
-                
-            }
-            else {
+                formattedFields.put(entry.getKey(), (ArrayList<Map<String, Object>>) entry.getValue());
+
+            } else {
                 formattedFields.put(entry.getKey(), entry.getValue());
             }
         }

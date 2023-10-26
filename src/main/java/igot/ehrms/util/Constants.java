@@ -70,6 +70,8 @@ public class Constants {
 	public static final String MSG_INVALID_EHRMS_USER = "Not an iGOT user";
 	public static final String MSG_UNAUTHORIZED_USER = "Unauthorized";
 	public static final String MSG_INVALID_REQUEST = "Invalid request: Email ID not provided";
+	public static final String MSG_INVALID_FIELD = "Invalid field: ";
+	public static final String ERROR = "ERROR";
 	
 	private Constants() {
 		throw new IllegalStateException("Utility class");
